@@ -116,3 +116,36 @@ def register():
 
         return redirect(url_for('get_questions'))
     return render_template('register.html', form=form)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        the_user = db.session.query(User).filter_by(email=request.form['email']).one()
+        if bcrypt.checkpq(request.form['password'].encode('utf-8'), the_user.password):
+            session['user'] = the_user.first_name
+            session['user_id'] = the_user.id
+
+            return redirect(url_for('get_questions'))
+        login_form.password.errors = ['incorrect username or password']
+        return render_template('login.html', form=login_form)
+    else:
+        return render_template('login.html', form=login_form)
+
+@app.route('/logout')
+def logout():
+    if session.get('user'):
+        session.clear()
+    return redirect(url_for('index'))
+
+@app.route('/questions/<question_id>/comment', methods=['POST'])
+def new_comment(question_id):
+    if session.get('user'):
+        comment_form = CommentForm()
+        if comment_form.validate_on_submit():
+            comment_text = request.form['comment']
+            new_record = Comment(comment_text, int(question_id), session['user_id'])
+            db.session.add(new_record)
+            db.session.commit()
+
+app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
