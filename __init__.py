@@ -5,11 +5,12 @@ from flask import session
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
-from database import db
-from models import Question as Question
-from models import User as User
-from models import Comment as Comment
-from forms import RegisterForm, LoginForm, CommentForm
+from .models import Question as Question
+from .models import User as User
+from .models import Comment as Comment
+from .forms import RegisterForm, LoginForm, CommentForm
+from .database import db
+
 
 
 app = Flask(__name__)   # create the app
@@ -150,5 +151,19 @@ def new_comment(question_id):
             new_record = Comment(comment_text, int(question_id), session['user_id'])
             db.session.add(new_record)
             db.session.commit()
+
+@app.route('/searchByTags', methods= ['GET', 'POST'])
+def searchByTags():
+    form = TagForm()
+    if form.validate_on_submit():
+        tag_data = form.tag.data
+        tag_data = tag_data.split(',')
+        tags = Tag.query.filter(Tag.body.in_(tag_data)).all()
+        tag_id = []
+        for tag in tags:
+            tag_id.append(tag.question_id)
+        questions = Question.query.filter(Question.question_id.in_(tag_id)).order_by(Question.timestamp.desc()).all()
+        render_template(searchByTags.html, form=form, questions=questions, title='Search by Tags')
+    return render_template(searchByTags.html, form=form, questions=[], title='Search by Tags')
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField
-from wtforms.validators import Length, DataRequired, EuqalTo, Email
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectMultipleField
+from wtforms.validators import Length, DataRequired, EqualTo, Email
 from wtforms import ValidationError
-from models import User
-from database import db
+from .models import User
+from .database import db
 
 class RegisterForm(FlaskForm):
     class Meta:
@@ -16,7 +16,7 @@ class RegisterForm(FlaskForm):
                                   ])
     password = PasswordField('Password', [DataRequired(message='Please enter a password.'),
                                           EqualTo('confirmPassword', message='Passwords must match'
-                                          ])
+                                                  )])
     confirmPassword = PasswordField('Confirm Password', validators=[Length(min=6, max=10)])
 
     submit = SubmitField('Submit')
@@ -27,7 +27,7 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     class Meta:
-        csrf = Meta
+        csrf = False
     email = StringField('Email', [Email(message='Not a valid email address'), DataRequired()])
     password = PasswordField('Password', [DataRequired(message='Please enter a password.')])
     submit = SubmitField('Submit')
@@ -41,3 +41,7 @@ class CommentForm(FlaskForm):
         csrf = False
     comment = TextAreaField('Comment', validator=[Length(min=1)])
     submit = SubmitField('Add Comment')
+
+class TagForm(FlaskForm):
+    tag = StringField('Tags')
+    submit = SubmitField('Search Tag')
