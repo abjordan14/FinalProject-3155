@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="UNCC Notes App">
+        <title>UNCC Notes App - View your Question</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    </head>
+    <body>
+    	<nav>
+    		<a href="{{ url_for('index')}}"> Home </a> ||
+    		<a href="{{ url_for('get_questions')}}"> My Notes </a>
+    	</nav>
+    	<h1>Welcome {{user}} to the 49er Notes App!</h1>
+        <h1>Question details</h1>
+        {% if question.comments %}
+            {% if question.comments|length > 0 %}
+                <h2>Comments</h2>
+                <ul>
+                {% for comment in question.comments %}
+                    <li>{{ comment.content }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+        {% endif %}
+        <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
+            <div class="formwrapper">
+                <h2 class="title">Add a comment</h2>
+                    <div class="form-field">
+                        {{ form.comment.label }} <br/> {{ form.comment }}
+                    </div>
+                    {{ form.submit }}
+             </div>
+        </form>
+        <table>
+
+                <th>Title</th>
+                <th>Text</th>
+                <th>Date</th>
+            </tr>
+
+            <tr>
+                <td>{{ question.title }}</td>
+                <td>{{ question.text }}</td>
+                <td>{{ question.date }}</td>
+            </tr>
+
+        </table>
+
+
+    </body>
+</html>
