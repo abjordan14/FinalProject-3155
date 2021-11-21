@@ -5,7 +5,6 @@ from flask import session
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
-from forms import RegisterForm, LoginForm
 from database import db
 from models import Question as Question
 from models import User as User
@@ -15,7 +14,7 @@ from forms import RegisterForm, LoginForm, CommentForm
 
 app = Flask(__name__)   # create the app
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_note_app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_class_app.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False   # don't need this
 app.config['SECRET_KEY'] = 'SE3155'                    # add secret key??????
