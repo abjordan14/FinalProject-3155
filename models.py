@@ -32,3 +32,15 @@ class User(db.Model):
         self.password = password
         self.registered_on = datetime.date.today()
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False)
+    content = db.Column(db.VARCHAR, nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, content, question_id, user_id):
+        self.date_posted = datetime.date.today()
+        self.content = content
+        self.question_id = question_id
+        self.user_id = user_id
