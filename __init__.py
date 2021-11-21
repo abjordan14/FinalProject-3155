@@ -10,6 +10,7 @@ from database import db
 from models import Question as Question
 from models import User as User
 from models import Comment as Comment
+from forms import RegisterForm, LoginForm, CommentForm
 
 
 app = Flask(__name__)   # create the app
