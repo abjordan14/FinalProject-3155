@@ -8,10 +8,10 @@ class Question(db.Model):
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comments = db.relationship('Comment', backref='question', cascade='all, delete-orphan', lazy=True)
-    tags = db.relationship('Tag', backref='question', lazy='dynamic')
+    #tags = db.relationship('Tag', backref='question', lazy='dynamic')
     upvotes = db.relationship('Upvote', backref='question', lazy='dynamic')
     downvotes = db.relationship('Downvote', backref='question', lazy='dynamic')
-    answered = db.Column(db.Integer)
+    #answered = db.Column(db.Integer)
 
     def __init__(self, title, text, date, user_id):
         self.title = title
@@ -52,8 +52,37 @@ class Comment(db.Model):
 class Tag(db.Model):
     __tablename__ = "tags"
     tag_id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Integer, db.ForeignKey('questions.question_id'))
+    body = db.Column(db.Integer, db.ForeignKey('question.id'))
 
     def __init__(self, tag_id, body):
         self.tag_id = tag_id
         self.body = body
+
+
+class Upvote(db.Model):
+    __tablename__ = "upvotes"
+    vote_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+
+    def __init__(self, vote_id, user_id, question_id, answer_id, comment_id):
+        self.vote_id = vote_id
+        self.user_id = user_id
+        self.question_id = question_id
+        self.answer_id = answer_id
+        self.comment_id = comment_id
+
+class Downvote(db.Model):
+    __tablename__ = 'downvotes'
+    vote_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+
+    def __init__(self, vote_id, user_id, question_id, answer_id, comment_id):
+        self.vote_id = vote_id
+        self.user_id = user_id
+        self.question_id = question_id
+        self.answer_id = answer_id
+        self.comment_id = comment_id
