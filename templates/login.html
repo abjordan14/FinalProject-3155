@@ -7,27 +7,36 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 </head>
     <body>
-        <div class="navdiv">
-            <nav>
-                <a href="{{ url_for('index') }}"> Home</a> ||
-                <a href="{{ url_for('get_questions') }}"> My Questions</a> ||
-                <a href="{{ url_for('new_question') }}">Add Question</a>
-            </nav>
+     <header>
+            <div class="dropdown">
+                <button class="dropbtn"> Menu </button>
+                <div class="dropdown-content">
+
+                    <li><a href="{{ url_for('index') }}"> Home </a></li>
+                    <li><a href="{{ url_for('register') }}"> Register  </a></li>
+
+                </div>
+            </div>
+        </header>
+        <header>
+        <div class="dropdown">
             {% if user %}
-            <nav>
-                <a href="{{ url_for('logout') }}"> Logout </a>
-            </nav>
+            <button class="dropbtn"> Menu </button>
+            <div class="dropdown-content">
+                <li> <a href="{{ url_for('logout') }}"> Logout </a> </li>
+            </div>
             {% else %}
-                <nav>
-                    <a href="{{ url_for('login')}}"> Sign In</a> ||
-                    <a href="{{ url_for('register') }}"> Register </a>
-                </nav>
+                <button class="dropbtn"> Menu </button>
+                <div class="dropdown-content">
+                    <li><a href="{{ url_for('login')}}"> Sign In</a></li>
+                    <li><a href="{{ url_for('register') }}"> Register </a></li>
+                </div>
             {% endif %}
         </div>
+        </header>
+        <h1>Welcome {% if user %}{{user}}{% endif %}to Social!</h1>
 
-        <h1>Welcome {% if user %}{{user}}{% endif %}to the 49er Notes App!</h1>
-
-        <h2>Use this site to maintain and organize your notes.</h2>
+        <h2>Ask questions of fellow students and professors.</h2>
         <div class="formwrapper">
             <h2 class="title">Login</h2>
             <form method="POST" action="/login">

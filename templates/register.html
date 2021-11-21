@@ -7,27 +7,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 </head>
     <body>
-        <div class="navdiv">
+        <header>
+            <img src='noun_Question_3368687.svg'>
+            <div class="dropdown">
+                <button class="dropbtn"> Menu </button>
+                <div class="dropdown-content">
 
-            <nav>
-                <a href="{{ url_for('index') }}"> Home</a> ||
-                <a href="{{ url_for('get_questions') }}"> My Questions</a> ||
-                <a href="{{ url_for('new_question') }}">Ask a Question</a>
-            </nav>
-            {% if user %}
-            <nav>
-                <a href="{{ url_for('logout') }}"> Logout </a>
-            </nav>
-            {% else %}
-            <nav>
-                <a href="{{ url_for('login')}}"> Sign In</a> ||
-                <a href="{{ url_for('register') }}"> Register </a>
-            </nav>
-            {% endif %}
-        </div>
-        <h1>Welcome {% if user %}{{user}}{% endif %}to the 49er Notes App!</h1>
+                    <li><a href="{{ url_for('index') }}"> Home</a></li>
+                    <li><a href="{{ url_for('login') }}"> Login </a></li>
 
-        <h2>Use this site to maintain and organize your notes.</h2>
+                </div>
+            </div>
+        </header>
+        <h1>Welcome {% if user %}{{user}}{% endif %}to Social!</h1>
+
+        <h2> A place where you can ask questions of your professors and classmates.</h2>
         <div class="formwrapper">
             <h2 class="title">Register</h2>
             <form method="POST" action="/register">
