@@ -1,3 +1,5 @@
+import bcrypt
+import os
 from flask import Flask
 from flask import session
 from flask import render_template
@@ -5,8 +7,9 @@ from flask import request
 from flask import redirect, url_for
 from forms import RegisterForm, LoginForm
 from database import db
-import bcrypt
-import os
+from models import Question as Question
+from models import User as User
+from models import Comment as Comment
 
 
 app = Flask(__name__)   # create the app
