@@ -8,7 +8,10 @@ from flask import redirect, url_for
 from .models import Question as Question
 from .models import User as User
 from .models import Comment as Comment
-from .forms import RegisterForm, LoginForm, CommentForm
+from .models import Tag as Tag
+from .models import Upvote as Upvote
+from .models import Downvote as Downvote
+from .forms import RegisterForm, LoginForm, CommentForm, TagForm
 from .database import db
 
 
@@ -30,6 +33,10 @@ Decorators
 '''
 
 @app.route('/')
+
+@app.route('/landing')
+def landing():
+    return render_template('landing.html')
 
 @app.route('/index')
 def index():
@@ -53,15 +60,15 @@ def get_question(question_id):
 @app.route('/my_questions/new', methods=['GET', "POST"])
 def new_question():
     if session.get('user'):
-        if request.method == "POST":
+        if request.method == 'POST':
             title = request.form['title']               # get question title
             text = request.form['questionText']         # get question text
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
-            new_record = Question(title, text, session['user_id'])
+            new_record = Question(title, text, today, session['user_id'])
             db.session.add(new_record)
-            db.sesion.commit()
+            db.session.commit()
 
             return redirect(url_for('get_questions'))
         else:
@@ -103,7 +110,7 @@ def delete_question(question_id):
 def register():
     form = RegisterForm()
 
-    if request.method == "POST" and form.validate_one_submit():
+    if request.method == "POST" and form.validate_on_submit():
         h_password = bcrypt.hashpw(
             request.form['password'].encode('utf-8'), bcrypt.gensalt()    # salt and hash password
         )
@@ -163,7 +170,7 @@ def searchByTags():
         for tag in tags:
             tag_id.append(tag.question_id)
         questions = Question.query.filter(Question.question_id.in_(tag_id)).order_by(Question.timestamp.desc()).all()
-        render_template(searchByTags.html, form=form, questions=questions, title='Search by Tags')
-    return render_template(searchByTags.html, form=form, questions=[], title='Search by Tags')
+        render_template('searchByTags.html', form=form, questions=questions, title='Search by Tags')
+    return render_template('searchByTags.html', form=form, questions=[], title='Search by Tags')
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
