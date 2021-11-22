@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="UNCC Notes App">
+        <title>Social</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <section>
+            <header>
+                <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('login') }}"> Login </a></li>
+                </ul>
+            </header>
+            <div class="content">
+                <div class="textBox">
+                    <h2> chat. ask. learn. <br> with <span> social </span> </h2>
+                    <p> Let's do fun stuff with our friends and we can have lots of fun and do things and learn and
+                    explore and study. Let's do fun stuff with our friends and we can have lots of fun and do things and learn and
+                    explore and study. Let's do fun stuff with our friends and we can have lots of fun and do things and learn and
+                    explore and study. Let's do fun stuff with our friends and we can have lots of fun and do things and learn and
+                    explore and study. </p>
+                    <a href="{{ url_for('register') }}"> Register </a>
+                </div>
+            </div>
+            <div class="imgBox">
+                <img src="{{url_for('static', filename='supplies.jpg')}}" class="social" style="max-width: 70%; display:flex; ">
+            </div>
+        </div>
+        </section>
+    </body>
+</html>
