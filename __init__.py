@@ -38,22 +38,24 @@ Decorators
 def landing():
     return render_template('landing.html')
 
-@app.route('/index')
-def index():
+@app.route('/profile')
+def profile():
     if session.get('user'):
-        return render_template('index.html', user= session['user'])
-    return render_template('index.html')
+        return render_template('profile.html', user= session['user'])
+    return render_template('profile.html')
 
 @app.route('/my_questions')
 def get_questions():
     if session.get('user'):
         my_questions = db.session.query(Question).filter_by(user_id=session['user_id']).all()
         return render_template('my_questions.html', questions=my_questions, user=session['user'])
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/my_questions/<question_id>')
 def get_question(question_id):
     if session.get('user'):
-        my_question = db.session.query(Question).filter_by(note_id, user_id=session['user_id']).one()
+        my_question = db.session.query(Question).filter_by(id=question_id, user_id=session['user_id']).one()
         form = CommentForm()
     return render_template('question.html', question=my_question, user=session['user'], form=form)
 
@@ -104,7 +106,7 @@ def delete_question(question_id):
         db.session.commit()
         return redirect(url_for('get_questions'))
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('get_questions'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -133,7 +135,7 @@ def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
         the_user = db.session.query(User).filter_by(email=request.form['email']).one()
-        if bcrypt.checkpq(request.form['password'].encode('utf-8'), the_user.password):
+        if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
             session['user'] = the_user.first_name
             session['user_id'] = the_user.id
 
@@ -172,5 +174,17 @@ def searchByTags():
         questions = Question.query.filter(Question.question_id.in_(tag_id)).order_by(Question.timestamp.desc()).all()
         render_template('searchByTags.html', form=form, questions=questions, title='Search by Tags')
     return render_template('searchByTags.html', form=form, questions=[], title='Search by Tags')
+
+'''@app.route('/like/<int:question_id>/<action>')
+def like_action(question_id, action):
+    question = Question.query.filter_by(id=question_id).first_or_404()
+    if action == 'like':
+        session['user_id'].like_question(question)
+        db.session.commit()
+    if action == 'unlike':
+        session['user_id'].unlike_question(question)
+        db.session.commit()
+    return redirect(request.referrer) '''
+
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
