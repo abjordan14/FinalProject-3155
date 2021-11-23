@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="UNCC Notes App">
+        <title>Social</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+    </head>
+    <body>
+        <header>
+                <a href="{{url_for('landing') }}"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('get_questions')}}" style="color: #e8e8e8;"> My Questions </a></li>
+                    <li><a href="{{ url_for('new_question')}}" style="color: #e8e8e8;"> Ask Question </a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: #e8e8e8;"> Logout </a></li>
+                </ul>
+        </header>
+
+        <h1 style="text-align: center;"> {{user}} Dashboard </h1>
+
+        <h2> Course Questions </h2>
+
+
+
+    </body>
+</html>

@@ -6,7 +6,8 @@
         <meta name="description" content="UNCC Notes App">
         <title>UNCC Notes App - New Note</title>
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
        <nav>
@@ -14,7 +15,7 @@
 
        </nav>
 
-        <h1>Welcome {{user}} to the 49er Notes App!</h1>
+        <h1>  New Question </h1>
         {% if question %}
         	<form action= "{{ url_for('update_question', question_id=question.id)}}" method="post">
         {% else %}
@@ -28,7 +29,7 @@
             	{% if question %}
             		{{question.text}}
             	{% else %}
-            		Ask your question here...
+            		What would you like to know?
             	{% endif %}
             </textarea>
             </p>
@@ -36,7 +37,7 @@
             	{% if question %}
             		<input type="submit" value="Update Question"/>
             	{% else %}
-            		<input type="submit" value= "Ask Question"/>
+            		<input type="submit" value= "Ask Question" style="max-width: 100%;"/>
             	{% endif %}
             </p>
         </form>

@@ -3,16 +3,20 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="UNCC Notes App">
+        <meta name="description" content="Questions">
         <title>View your Questions</title>
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-    	<nav>
-    		<a href="{{ url_for('index')}}"> Home </a> ||
-    		<a href="{{ url_for('get_questions')}}"> My Notes </a>
-    	</nav>
+    	<header>
+            <a href="{{url_for('landing') }}"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
+    		<ul>
+                <li><a href="{{ url_for('landing')}}"> Home </a></li>
+                <li><a href="{{ url_for('new_question')}}"> Ask </a></li>
+                <li><a href="{{ url_for('logout')}}"> Logout </a></li>
+            </ul>
+    	</header>
 
     	<h1>Welcome {{user}} to Social!</h1>
 

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 </head>
     <body>
@@ -12,7 +12,7 @@
                 <button class="dropbtn"> Menu </button>
                 <div class="dropdown-content">
 
-                    <li><a href="{{ url_for('index') }}"> Home </a></li>
+                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
                     <li><a href="{{ url_for('register') }}"> Register  </a></li>
 
                 </div>
@@ -28,7 +28,7 @@
             {% else %}
                 <button class="dropbtn"> Menu </button>
                 <div class="dropdown-content">
-                    <li><a href="{{ url_for('login')}}"> Sign In</a></li>
+                    <li><a href="{{ url_for('landing')}}"> Home</a></li>
                     <li><a href="{{ url_for('register') }}"> Register </a></li>
                 </div>
             {% endif %}
