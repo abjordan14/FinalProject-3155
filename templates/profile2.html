@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Social Profile </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <img src="{{url_for('static', filename='logo.png')}}" class="logo">
+            <ul>
+                <!-- email box, notification etc. -->
+                <li> <img src="{{url_for('static', filename='house-solid.svg')}}"></li>
+                <li> <img src="{{url_for('static', filename='bell-regular.svg')}}"></li>
+                <li> <img src="{{url_for('static', filename='circle-half-stroke-solid.svg')}}"></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search-box">
+                <!-- add search icon -->
+                <img src="{{url_for('static', filename='magnifying-glass-solid.svg')}}">
+                <input type="text" placeholder="Search">
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- left sidebar -->
+        <div class="left-sidebar">
+            <div class="imp-links">
+                <!--- add image in src-->
+                <a href="#"><img src="#"> Latest News</a>
+                <a href="#"><img src="#"> Class </a>
+                <a href="#"><img src="#"> Group</a>
+
+            </div>
+        </div>
+        <!-- main content -->
+        <div class="main-content">
+            <h2>Welcome {{user}} to Social!</h2>
+
+            <h2>Questions</h2>
+
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                </tr>
+                {% for question in questions %}
+                <tr>
+                    <td><a href="{{url_for('get_question', question_id=question.id)}}">{{ question.title }}</a></td>
+                    <td>{{ question.date }}</td>
+                    <td> {{question.text}}</td>
+                    <td> <a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a></td>
+                    <td>
+                	    <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+                		    <input type="submit" value="Delete">
+                	    </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+
+        </div>
+
+        <!-- right sidebar -->
+        <div class="right-sidebar">
+
+
+        </div>
+    </div>
+
+</body>
+</html>

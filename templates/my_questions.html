@@ -18,9 +18,9 @@
             </ul>
     	</header>
 
-    	<h1>Welcome {{user}} to Social!</h1>
+    	<h2>Welcome {{user}} to Social!</h2>
 
-        <h1>Questions</h1>
+        <h2>Questions</h2>
 
         <table>
             <tr>
@@ -31,7 +31,7 @@
             <tr>
                 <td><a href="{{url_for('get_question', question_id=question.id)}}">{{ question.title }}</a></td>
                 <td>{{ question.date }}</td>
-                <td><a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a></td>
+                <td> <a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a></td>
                 <td>
                 	<form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
                 		<input type="submit" value="Delete">

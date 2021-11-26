@@ -1,5 +1,14 @@
+@import url('https://fonts.googleapis.com/  css?family=Poppins: 200,300,400,500,600,700,800,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 header img{
-    height: 80px;
+    height: 60px;
 }
 
 body {
@@ -15,12 +24,12 @@ main {
 }
 
 header {
-    background-color: #C2DA10;
+    background-color: #7fb04f;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 80px;
     display: flex;
     align-items: center;
 }
