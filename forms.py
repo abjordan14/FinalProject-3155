@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectMultipleField
-from wtforms.validators import Length, DataRequired, EqualTo, Email
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectMultipleField, HiddenField
+from wtforms.validators import Length, DataRequired, EqualTo, Email, InputRequired
 from wtforms import ValidationError
 from .models import User
 from .database import db
@@ -39,9 +39,8 @@ class LoginForm(FlaskForm):
 class CommentForm(FlaskForm):
     class Meta:
         csrf = False
-    comment = TextAreaField('Comment', validator=[Length(min=1)])
+    comment = TextAreaField('Comment', validators=[Length(min=1)])
     submit = SubmitField('Add Comment')
 
-class TagForm(FlaskForm):
-    tag = StringField('Tags')
-    submit = SubmitField('Search Tag')
+class RatingForm(FlaskForm):
+    rating = HiddenField('rating', validators=[InputRequired()])

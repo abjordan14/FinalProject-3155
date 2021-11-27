@@ -5,13 +5,12 @@ from flask import session
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
+from werkzeug.utils import secure_filename
 from .models import Question as Question
 from .models import User as User
 from .models import Comment as Comment
-from .models import Tag as Tag
-from .models import Upvote as Upvote
-from .models import Downvote as Downvote
-from .forms import RegisterForm, LoginForm, CommentForm, TagForm
+from .models import Img as Img
+from .forms import RegisterForm, LoginForm, CommentForm
 from .database import db
 
 
@@ -41,8 +40,9 @@ def landing():
 @app.route('/profile')
 def profile():
     if session.get('user'):
-        return render_template('profile.html', user= session['user'])
-    return render_template('profile.html')
+        my_questions = db.session.query(Question).all()
+        return render_template('profile2.html', questions=my_questions, user= session['user'])
+    return redirect(url_for('login'))
 
 @app.route('/my_questions')
 def get_questions():
@@ -160,31 +160,43 @@ def new_comment(question_id):
             new_record = Comment(comment_text, int(question_id), session['user_id'])
             db.session.add(new_record)
             db.session.commit()
+            return redirect(url_for('get_question', question_id=question_id))
+    else:
+        return redirect(url_for('login'))
 
-@app.route('/searchByTags', methods= ['GET', 'POST'])
-def searchByTags():
-    form = TagForm()
-    if form.validate_on_submit():
-        tag_data = form.tag.data
-        tag_data = tag_data.split(',')
-        tags = Tag.query.filter(Tag.body.in_(tag_data)).all()
-        tag_id = []
-        for tag in tags:
-            tag_id.append(tag.question_id)
-        questions = Question.query.filter(Question.question_id.in_(tag_id)).order_by(Question.timestamp.desc()).all()
-        render_template('searchByTags.html', form=form, questions=questions, title='Search by Tags')
-    return render_template('searchByTags.html', form=form, questions=[], title='Search by Tags')
 
-'''@app.route('/like/<int:question_id>/<action>')
+@app.route('/like/<int:question_id>/<action>')
 def like_action(question_id, action):
-    question = Question.query.filter_by(id=question_id).first_or_404()
-    if action == 'like':
-        session['user_id'].like_question(question)
-        db.session.commit()
-    if action == 'unlike':
-        session['user_id'].unlike_question(question)
-        db.session.commit()
-    return redirect(request.referrer) '''
+    if session.get('user'):
+        question = Question.query.filter_by(id=question_id).first_or_404()
+        if action == 'like':
+            current_user = session['user']
+            current_user.like_question(question)
+            db.session.commit()
+        if action == 'unlike':
+            current_user = session['user']
+            current_user.unlike_question(question)
+            db.session.commit()
+    return redirect(request.referrer)
 
+@app.route('/questions/<question_id>/upload', methods=["GET", "POST"])
+def upload():
+    pic = request.files['pic']
+    if not pic:
+        return "No pic uploaded", 400
+
+    filename = secure_filename(file.filename)
+    mimetype = pic.mimetype
+    img = Img(img=pic.read(), mimetype=mimetype, name=filename)
+    db.session.add(img)
+    db.sesion.commit()
+    return redirect(url_for('get_question'))
+
+#@app.route('/questions/<question_id>/image')
+#def get_image(question_id):
+ #   img = Img.query.filter_by(id=question_id).first()
+  #  if not img:
+   #     return redirect(url_for('get_question'))
+    #return Response(img.img, mimetype=img.mimetype)
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

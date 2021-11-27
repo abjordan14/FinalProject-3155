@@ -4,36 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="UNCC Notes App">
-        <title>UNCC Notes App - View your Question</title>
+        <title>Social - View your Question</title>
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
     	<nav>
-    		<a href="{{ url_for('index')}}"> Home </a> ||
-    		<a href="{{ url_for('get_questions')}}"> My Notes </a>
+    		<a href="{{ url_for('landing')}}"> Home </a> ||
+    		<a href="{{ url_for('get_questions')}}"> My Questions </a>
     	</nav>
-    	<h1>Welcome {{user}} to the 49er Notes App!</h1>
+    	<h1> {{user}}'s questions </h1>
         <h1>Question details</h1>
-        {% if question.comments %}
-            {% if question.comments|length > 0 %}
-                <h2>Comments</h2>
-                <ul>
-                {% for comment in question.comments %}
-                    <li>{{ comment.content }}</li>
-                {% endfor %}
-                </ul>
-                {% endif %}
-        {% endif %}
-        <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
-            <div class="formwrapper">
-                <h2 class="title">Add a comment</h2>
-                    <div class="form-field">
-                        {{ form.comment.label }} <br/> {{ form.comment }}
-                    </div>
-                    {{ form.submit }}
-             </div>
-        </form>
+
+
         <table>
 
                 <th>Title</th>
@@ -46,9 +29,46 @@
                 <td>{{ question.text }}</td>
                 <td>{{ question.date }}</td>
 
+
             </tr>
 
+
+    {% for user in users %}
+                {% if user.has_liked_question(question) %}
+                <tr>
+                <td> <a href="{{url_for('like_action', question_id=question.id, action='unlike')}}"> Unlike</a> </td>
+                {% else %}
+                <td> <a href="{{url_for('like_action', question_id=question.id, action='like')}}"> Like </a> </td>
+                {% endif %}
+                    {{ user.liked.count() }} Likes
+                 {% endfor %}
+            </tr>
         </table>
+     {% if question.comments %}
+            {% if question.comments|length > 0 %}
+                <h2>Comments</h2>
+                <ul>
+                {% for comment in question.comments %}
+                    <li>{{ comment.content }}</li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+        {% endif %}
+
+
+        <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
+            <div class="formwrapper">
+                <h2 class="title">Add a comment</h2>
+                    <div class="form-field">
+                        {{ form.comment.label }} <br/> {{ form.comment }}
+                    </div>
+                    {{ form.submit }}
+             </div>
+        </form>
+    <form action="{{ url_for('upload', question_id=question.id) }}" method="post">
+        <input type="file" name="pic"/>
+        <input type="submit" value="Upload a file"/>
+    </form>
 
 
     </body>

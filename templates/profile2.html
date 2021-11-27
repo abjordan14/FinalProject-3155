@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Social Profile </title>
+    <title> Social - Profile </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <script type="text/javascript">
+        document.querySelector('.rating-wrapper').addEventListener('click', updateStarRating, false);
+
+        function updateStarRating(evt){
+            for(i=0; i<parseInt(evt.target.id); i++){
+                const stars= document.querySelectorAll('.rating-wrapper img');
+                for (s=0; s<5; s++){
+                    stars[s].classList.remove('rating-checked');
+                }
+                for(j=0; j<parseInt(evt.target.id); j++){
+                    stars[j].classList.add('rating-checked');
+                }
+            }
+            document.querySelector('#rating').value= evt.target.id;
+        }
+    </script>
 </head>
 <body>
     <nav>
         <div class="nav-left">
-            <img src="{{url_for('static', filename='logo.png')}}" class="logo">
             <ul>
                 <!-- email box, notification etc. -->
                 <li> <img src="{{url_for('static', filename='house-solid.svg')}}"></li>
@@ -37,7 +52,7 @@
                 <!--- add image in src-->
                 <a href="#"><img src="#"> Latest News</a>
                 <a href="#"><img src="#"> Class </a>
-                <a href="#"><img src="#"> Group</a>
+                <a href="#"><img src="#"> Filter </a>
 
             </div>
         </div>
@@ -45,27 +60,45 @@
         <div class="main-content">
             <h2>Welcome {{user}} to Social!</h2>
 
-            <h2>Questions</h2>
+            <br>
+            <br>
 
-            <table>
-                <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                </tr>
+
                 {% for question in questions %}
-                <tr>
-                    <td><a href="{{url_for('get_question', question_id=question.id)}}">{{ question.title }}</a></td>
-                    <td>{{ question.date }}</td>
-                    <td> {{question.text}}</td>
-                    <td> <a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a></td>
-                    <td>
-                	    <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+
+                <div class="row justify-content-center mt-3">
+                    <div class="'col-md-5 col-sm-2 border-bottom">
+                        <p><strong> <a href="{{ url_for('get_question', question_id=question.id) }}">{{ question.title }}</a></strong> {{question.date}}</p>
+                        <br>
+                        <p> {{question.text}}</p>
+                        <p><a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a>
+                        <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
                 		    <input type="submit" value="Delete">
-                	    </form>
-                    </td>
-                </tr>
+                        </form></p>
+                    </div>
+                    </div>
+                <div>
+                    {% for user in users %}
+                    {% if user.has_liked_question(question) %}
+                    <p> <a href="{{url_for('like_action', question_id=question.id, action='unlike')}}"> Unlike</a> </p>
+                    {% else %}
+                    <p> <a href="{{url_for('like_action', question_id=question, action='like')}}"> Like </a> </p>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                    <div class="rating-wrapper">
+                        <img id="1" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="2" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="3" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="4" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="5" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                    </div>
+            <br>
+            <br>
+
                 {% endfor %}
-            </table>
+
+
 
 
         </div>
