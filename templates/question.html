@@ -7,14 +7,19 @@
         <title>Social - View your Question</title>
         <!-- styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
-    	<nav>
-    		<a href="{{ url_for('landing')}}"> Home </a> ||
-    		<a href="{{ url_for('get_questions')}}"> My Questions </a>
-    	</nav>
+    	<header>
+                <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
+                    <li><a href="{{ url_for('profile') }}"> Profile </a></li>
+                    <li><a href="{{ url_for('logout') }}"> Logout </a></li>
+                </ul>
+        </header>
     	<h1> {{user}}'s questions </h1>
-        <h1>Question details</h1>
+        <h3>Question details</h3>
 
 
         <table>

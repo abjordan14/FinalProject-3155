@@ -41,7 +41,7 @@ def landing():
 def profile():
     if session.get('user'):
         my_questions = db.session.query(Question).all()
-        return render_template('profile2.html', questions=my_questions, user= session['user'])
+        return render_template('profile.html', questions=my_questions, user= session['user'])
     return redirect(url_for('login'))
 
 @app.route('/my_questions')
@@ -165,22 +165,9 @@ def new_comment(question_id):
         return redirect(url_for('login'))
 
 
-@app.route('/like/<int:question_id>/<action>')
-def like_action(question_id, action):
-    if session.get('user'):
-        question = Question.query.filter_by(id=question_id).first_or_404()
-        if action == 'like':
-            current_user = session['user']
-            current_user.like_question(question)
-            db.session.commit()
-        if action == 'unlike':
-            current_user = session['user']
-            current_user.unlike_question(question)
-            db.session.commit()
-    return redirect(request.referrer)
 
 @app.route('/questions/<question_id>/upload', methods=["GET", "POST"])
-def upload():
+def upload(question_id):
     pic = request.files['pic']
     if not pic:
         return "No pic uploaded", 400
@@ -192,11 +179,11 @@ def upload():
     db.sesion.commit()
     return redirect(url_for('get_question'))
 
-#@app.route('/questions/<question_id>/image')
-#def get_image(question_id):
- #   img = Img.query.filter_by(id=question_id).first()
-  #  if not img:
-   #     return redirect(url_for('get_question'))
-    #return Response(img.img, mimetype=img.mimetype)
+'''@app.route('/questions/<question_id>/image')
+def get_image(question_id):
+    img = Img.query.filter_by(id=question_id).first()
+    if not img:
+        return redirect(url_for('get_question'))
+    return redirect(url_for() '''
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

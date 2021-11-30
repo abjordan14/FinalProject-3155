@@ -3,27 +3,50 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="UNCC Notes App">
+        <meta name="description" content="Social - Profile">
         <title>Social</title>
         <!-- styles -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='profile3.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+
     </head>
     <body>
         <header>
-                <a href="{{url_for('landing') }}"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
                 <ul>
-                    <li><a href="{{ url_for('get_questions')}}" style="color: #e8e8e8;"> My Questions </a></li>
-                    <li><a href="{{ url_for('new_question')}}" style="color: #e8e8e8;"> Ask Question </a></li>
-                    <li><a href="{{ url_for('logout') }}" style="color: #e8e8e8;"> Logout </a></li>
+                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
+                    <li><a href="{{ url_for('new_question') }}"> Ask </a></li>
+                    <li><a href="{{ url_for('logout') }}"> Logout </a></li>
                 </ul>
         </header>
-
-        <h1 style="text-align: center;"> {{user}} Dashboard </h1>
-
-        <h2> Course Questions </h2>
-
-
+        <div class="header">
+            <h2> Course Questions </h2>
+        </div>
+        {% for question in questions %}
+        <div class="row">
+            <div class="leftcolumn">
+                <div class="card">
+                    <h2><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a></h2>
+                    <h5> {{question.date}}</h5>
+                    <br>
+                    <p style="font-size: 20px;">{{question.text}}</p>
+                    <br>
+                    <div class="fakeimg" style="height:200px;">Image</div>
+                        <p><a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 3%"> </a>
+                        <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+                		    <input type="submit" value="Delete">
+                        </form></p>
+                    <div class="rating-wrapper">
+                        <img id="1" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="2" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="3" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="4" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                        <img id="5" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
+                    </div>
+                 </div>
+            </div>
+        </div>
+        {% endfor %}
 
     </body>
 </html>

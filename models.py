@@ -36,24 +36,6 @@ class User(db.Model):
         self.password = password
         self.registered_on = datetime.date.today()
 
-    def like_question(self, question):
-        if not self.has_liked_question(question):
-            like = QuestionLike(user_id=self.id, question_id=question.id)
-            db.session.add(like)
-    def unlike_question(self, question):
-        if self.has_liked_question(question):
-            QuestionLike.query.filer_by(user_id=self.id, question_id=question.id).delete()
-
-    def has_liked_question(self, question):
-        return QuestionLike.query.filter(
-            QuestionLike.user_id == self.id,
-            QuestionLike.question_id == question.id).count() > 0
-
-class QuestionLike(db.Model):
-    __tablename__ = 'question_like'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,7 +52,7 @@ class Comment(db.Model):
 
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    #question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
     img = db.Column(db.Text, unique=True, nullable=False)
     name = db.Column(db.Text, nullable=False)
     mimetype = db.Column(db.Text, nullable=False)

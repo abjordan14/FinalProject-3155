@@ -7,36 +7,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 </head>
     <body>
-     <header>
-            <div class="dropdown">
-                <button class="dropbtn"> Menu </button>
-                <div class="dropdown-content">
-
-                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
-                    <li><a href="{{ url_for('register') }}"> Register  </a></li>
-
-                </div>
-            </div>
-        </header>
         <header>
-        <div class="dropdown">
             {% if user %}
-            <button class="dropbtn"> Menu </button>
-            <div class="dropdown-content">
-                <li> <a href="{{ url_for('logout') }}"> Logout </a> </li>
-            </div>
+             <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('landing') }}"> Back </a></li>
+                </ul>
             {% else %}
-                <button class="dropbtn"> Menu </button>
-                <div class="dropdown-content">
-                    <li><a href="{{ url_for('landing')}}"> Home</a></li>
+                  <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('landing') }}"> Back </a></li>
                     <li><a href="{{ url_for('register') }}"> Register </a></li>
-                </div>
+                </ul>
             {% endif %}
-        </div>
         </header>
-        <h1>Welcome {% if user %}{{user}}{% endif %}to Social!</h1>
 
-        <h2>Ask questions of fellow students and professors.</h2>
         <div class="formwrapper">
             <h2 class="title">Login</h2>
             <form method="POST" action="/login">

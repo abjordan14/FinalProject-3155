@@ -3,25 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Social - Register</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
 </head>
     <body>
         <header>
-            <img src='noun_Question_3368687.svg'>
-            <div class="dropdown">
-                <button class="dropbtn"> Menu </button>
-                <div class="dropdown-content">
-
-                    <li><a href="{{ url_for('landing') }}"> Home</a></li>
-                    <li><a href="{{ url_for('login') }}"> Login </a></li>
-
-                </div>
-            </div>
+                <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
+                <ul>
+                    <li><a href="{{ url_for('landing') }}"> Back </a></li>
+                </ul>
         </header>
-        <h1>Welcome {% if user %}{{user}}{% endif %}to Social!</h1>
-
-        <h2> A place where you can ask questions of your professors and classmates.</h2>
+       <br>
         <div class="formwrapper">
             <h2 class="title">Register</h2>
             <form method="POST" action="/register">
