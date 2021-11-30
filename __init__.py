@@ -41,7 +41,8 @@ def landing():
 def profile():
     if session.get('user'):
         my_questions = db.session.query(Question).all()
-        return render_template('profile.html', questions=my_questions, user= session['user'])
+        form = CommentForm()
+        return render_template('profile.html', questions=my_questions, user= session['user'], form=form)
     return redirect(url_for('login'))
 
 @app.route('/my_questions')

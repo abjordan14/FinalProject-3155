@@ -43,6 +43,28 @@
                         <img id="4" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                         <img id="5" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                     </div>
+                    {% if question.comments %}
+                    {% if question.comments|length > 0 %}
+                    <h2>Comments</h2>
+                    <ul>
+                    {% for comment in question.comments %}
+                        <li>{{ comment.content }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endif %}
+
+                    <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
+                         <div class="formwrapper">
+                            <h2 class="title">Add a comment</h2>
+                             <div class="form-field">
+                                {{ form.comment.label }} <br/> {{ form.comment }}
+                            </div>
+                                {{ form.submit }}
+                        </div>
+                    </form>
+             </div>
+        </form>
                  </div>
             </div>
         </div>
