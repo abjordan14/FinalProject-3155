@@ -38,16 +38,6 @@
             </tr>
 
 
-    {% for user in users %}
-                {% if user.has_liked_question(question) %}
-                <tr>
-                <td> <a href="{{url_for('like_action', question_id=question.id, action='unlike')}}"> Unlike</a> </td>
-                {% else %}
-                <td> <a href="{{url_for('like_action', question_id=question.id, action='like')}}"> Like </a> </td>
-                {% endif %}
-                    {{ user.liked.count() }} Likes
-                 {% endfor %}
-            </tr>
         </table>
      {% if question.comments %}
             {% if question.comments|length > 0 %}
@@ -59,21 +49,10 @@
                 </ul>
                 {% endif %}
         {% endif %}
-
-
-        <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
-            <div class="formwrapper">
-                <h2 class="title">Add a comment</h2>
-                    <div class="form-field">
-                        {{ form.comment.label }} <br/> {{ form.comment }}
-                    </div>
-                    {{ form.submit }}
-             </div>
-        </form>
-    <form action="{{ url_for('upload', question_id=question.id) }}" method="post">
-        <input type="file" name="pic"/>
-        <input type="submit" value="Upload a file"/>
-    </form>
+        <p><a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 3%"> </a>
+        <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+            <input type="submit" value="Delete">
+        </form></p>
 
 
     </body>

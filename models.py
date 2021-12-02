@@ -5,15 +5,16 @@ class Question(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(200))
     text = db.Column('text', db.String(100))
+    img_url = db.Column('img_url', db.String(200))
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comments = db.relationship('Comment', backref='question', cascade='all, delete-orphan', lazy=True)
 
-
-    def __init__(self, title, text, date, user_id):
+    def __init__(self, title, text, date, img_url, user_id):
         self.title = title
         self.text = text
         self.date = date
+        self.img_url = img_url
         self.user_id = user_id
 
 
@@ -27,7 +28,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     questions = db.relationship('Question', backref='user', lazy=True)
     comments = db.relationship('Comment', backref='user', lazy=True)
-    liked = db.relationship('QuestionLike', foreign_keys='QuestionLike.user_id', backref='user', lazy='dynamic')
+
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
@@ -49,12 +50,4 @@ class Comment(db.Model):
         self.content = content
         self.question_id = question_id
         self.user_id = user_id
-
-class Img(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    #question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
-    img = db.Column(db.Text, unique=True, nullable=False)
-    name = db.Column(db.Text, nullable=False)
-    mimetype = db.Column(db.Text, nullable=False)
-
 
