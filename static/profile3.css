@@ -1,17 +1,25 @@
+@import url('https://fonts.googleapis.com/  css?family=Poppins: 200,300,400,500,600,700,800,900&display=swap');
 
 body {
-  font-family: Arial;
+  font-family: Poppins;
   padding: 20px;
-  background: #f1f1f1;
+  background: #ffffff;
 }
 
 /* Header/Blog Title */
+.nav {
+    background: #d1d1d1;
+    position: fixed;
+}
+
 .header {
   padding: 30px;
   font-size: 40px;
   text-align: center;
-  background: white;
+  color: #404040;
 }
+
+
 
 /* Create two unequal columns that floats next to each other */
 /* Left column */
@@ -22,23 +30,27 @@ body {
 
 /* Right column */
 .rightcolumn {
-  float: left;
+  float: right;
   width: 25%;
   padding-left: 20px;
 }
 
-/* Fake image */
-.fakeimg {
-  background-color: #aaa;
-  width: 100%;
-  padding: 20px;
+.center {
+  margin: auto;
+  width: 65%;
+  padding: 35px;
 }
 
+p {
+  color: #404040;
+}
 /* Add a card effect for articles */
 .card {
-  background-color: white;
-  padding: 20px;
-  margin-top: 20px;
+  background-color: #ffffff;
+  padding: 40px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Clear floats after the columns */

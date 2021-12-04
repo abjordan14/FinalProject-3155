@@ -100,38 +100,40 @@ header ul li a{
     padding-right: 50px;
     margin-top: 50px;
 }
+
 nav {
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #1876f2;
+    background: #efefef;
     padding: 5px 5%;
     position: sticky;
     top: 0;
     z-index: 100;
 }
+
 .logo {
     width: 60px;
     margin-right: 45px;
 }
 
-.nav-left .nav-right{
+.nav-left .nav-right {
     display: flex;
     align-items: center;
 }
 
-.nav-left ul li{
+.nav-left ul li {
     list-style: none;
     display: inline-block;
 }
 
-.nav-left ul li img{
+.nav-left ul li img {
     width: 18px;
     margin: 0 15px;
 }
 
 .search-box {
-    background: #efefef;
+    background: #ffffff;
     width: 350px;
     border-radius: 20px;
     display: flex;
@@ -158,27 +160,29 @@ nav {
 }
 
 .left-sidebar{
-    flex-basis: 25%;
+    flex-basis: 50%;
     position: sticky;
     top: 70px;
     align-self: flex-start;
 
 }
+
 .right-sidebar{
     flex-basis: 25%;
     position: sticky;
     top: 70px;
     align-self: flex-start;
-    background: #fff;
+    background: #474747;
     padding: 20px;
     border-radius: 4px;
-    color: #626262;
+    color: #474747;
 }
 
 .main-content{
     flex-basis: 47%
 
 }
+
 .imp-links a {
    text-decoration: none;
     display: flex;

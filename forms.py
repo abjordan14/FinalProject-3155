@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectMultipleField, HiddenField
 from wtforms.validators import Length, DataRequired, EqualTo, Email, InputRequired
 from wtforms import ValidationError
@@ -41,6 +42,3 @@ class CommentForm(FlaskForm):
         csrf = False
     comment = TextAreaField('Comment', validators=[Length(min=1)])
     submit = SubmitField('Add Comment')
-
-class RatingForm(FlaskForm):
-    rating = HiddenField('rating', validators=[InputRequired()])

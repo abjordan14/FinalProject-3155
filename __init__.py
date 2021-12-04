@@ -73,7 +73,7 @@ def new_question():
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
-            new_record = Question(title, text, img_url, today, session['user_id'])
+            new_record = Question(title, text, today, img_url, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
 
@@ -162,12 +162,15 @@ def new_comment(question_id):
         comment_form = CommentForm()
         if comment_form.validate_on_submit():
             comment_text = request.form['comment']
-            new_record = Comment(comment_text, int(question_id), session['user_id'])
+            from datetime import date
+            today = date.today()
+            today = today.strftime("%m-%d-%Y")
+            new_record = Comment(comment_text, int(question_id), today, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
-            return redirect(url_for('get_question', question_id=question_id))
+            return redirect(url_for('profile', question_id=question_id))
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('profile'))
 
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

@@ -6,53 +6,77 @@
         <meta name="description" content="UNCC Notes App">
         <title>Social - View your Question</title>
         <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='profile3.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+         <style>
+            input[type=button], input[type=submit], input[type=reset] {
+              background-color: #C2DA10;
+              border: none;
+              color: white;
+              padding: 16px 32px;
+              text-decoration: none;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+        </style>
+
     </head>
     <body>
-    	<header>
-                <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
-                <ul>
-                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
-                    <li><a href="{{ url_for('profile') }}"> Profile </a></li>
-                    <li><a href="{{ url_for('logout') }}"> Logout </a></li>
-                </ul>
-        </header>
-    	<h1> {{user}}'s questions </h1>
-        <h3>Question details</h3>
+    	<header class="nav">
+            <a href="{{url_for('landing') }}"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
+    		<ul>
+                <li><a href="{{ url_for('landing')}}"> Home </a></li>
+                <li><a href="{{ url_for('profile')}}"> Course Questions </a></li>
+                <li><a href="{{ url_for('new_question')}}"> Ask </a></li>
+                <li><a href="{{ url_for('logout')}}"> Logout </a></li>
+            </ul>
+    	</header>
 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
 
-        <table>
+    	<h1 style="text-align: center;"> {{question.title}}  <a href="{{ url_for('update_question', question_id=question.id)}}">
+                        <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width:1.5%">
+                    </a> </h1>
 
-                <th>Title</th>
-                <th>Text</th>
-                <th>Date</th>
-            </tr>
+    <div class="row">
+            <div class="center">
+                <div class="card">
+                    <h5> {{question.date}}</h5>
 
-            <tr>
-                <td>{{ question.title }}</td>
-                <td>{{ question.text }}</td>
-                <td>{{ question.date }}</td>
+                    <br>
+                    <p style="font-size: 20px;">{{question.text}}</p>
+                    <br>
+                    {% if question.date %}
+                        <img src={{question.img_url}} >
+                        <br>
+                    {% endif %}
+                    <br>
+                     {% if question.comments %}
+                            {% if question.comments|length > 0 %}
+                        <h3>Comments</h3>
+                            <br>
+                            <br>
+                                {% for comment in question.comments %}
+                                    <p>{{comment.date}} &nbsp; &nbsp; &nbsp; <em>{{ comment.content }}</em> </p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    <br>
+                    <br>
+                    <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+                		<input type="submit" value="Delete">
+                	</form>
+                </div>
+            </div>
+        </div>
 
-
-            </tr>
-
-
-        </table>
-     {% if question.comments %}
-            {% if question.comments|length > 0 %}
-                <h2>Comments</h2>
-                <ul>
-                {% for comment in question.comments %}
-                    <li>{{ comment.content }}</li>
-                {% endfor %}
-                </ul>
-                {% endif %}
-        {% endif %}
-        <p><a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 3%"> </a>
-        <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
-            <input type="submit" value="Delete">
-        </form></p>
 
 
     </body>
