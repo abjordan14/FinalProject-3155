@@ -12,6 +12,7 @@ from .models import User as User
 from .models import Comment as Comment
 from .forms import RegisterForm, LoginForm, CommentForm
 from .database import db
+from .models import Liked as Liked
 
 
 
@@ -21,7 +22,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_class_app.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False   # don't need this
 app.config['SECRET_KEY'] = 'SE3155'                    # add secret key??????
-app.config['IMGUR_ID'] = "ae328a1f1592e82"
 db.init_app(app)                                        # bind the db object to this flask app
 
 with app.app_context():                                 # set up app and run it under app context
@@ -40,7 +40,7 @@ Decorators
 def landing():
     return render_template('landing.html')
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if session.get('user'):
         my_questions = db.session.query(Question).all()
@@ -171,6 +171,25 @@ def new_comment(question_id):
             return redirect(url_for('profile', question_id=question_id))
     else:
         return redirect(url_for('profile'))
+
+@app.route('/questions/like/<question_id>', methods=['POST'])
+def like(question_id):
+    hasLiked = False
+    like = Liked(question_id, session['user_id'])
+    question = db.session.query(Question).filter_by(id=question_id).one()
+    if session.get('user'):
+        if len(question.like) > 0:
+            Liked.query.filter_by(question_id=question_id).delete()
+            db.session.commit()
+            hasLiked = False
+        else:
+            db.session.add(like)
+            db.session.commit()
+            hasLiked=True
+        return redirect(url_for('profile', question_id=question_id))
+    else:
+        return redirect(url_for('login'))
+
 
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

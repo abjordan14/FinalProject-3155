@@ -47,17 +47,30 @@
 
     <div class="row">
             <div class="center">
-                <div class="card">
+                < class="card">
                     <h5> {{question.date}}</h5>
 
                     <br>
                     <p style="font-size: 20px;">{{question.text}}</p>
                     <br>
-                    {% if question.date %}
+                    {% if question.img_url %}
                         <img src={{question.img_url}} >
                         <br>
                     {% endif %}
                     <br>
+
+                    <!-- Like -->
+                    {% if hasLiked %}
+                        <div action="{{ url_for('like', question_id=question.id) }}" method="post">
+                        <input type="submit" value="unlike" name="unlike"/>
+                    {% else %}
+                        <form action="{{ url_for('like', question_id=question.id) }}" method="post">
+                        <input type="submit" value="like" name="like"/>
+                    {% endif %}
+                    <span> {{question.like | length}} likes </span>
+                        </form>
+                        </div>
+
                      {% if question.comments %}
                             {% if question.comments|length > 0 %}
                         <h3>Comments</h3>
@@ -73,6 +86,7 @@
                     <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
                 		<input type="submit" value="Delete">
                 	</form>
+
                 </div>
             </div>
         </div>

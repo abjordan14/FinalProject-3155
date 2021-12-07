@@ -42,3 +42,6 @@ class CommentForm(FlaskForm):
         csrf = False
     comment = TextAreaField('Comment', validators=[Length(min=1)])
     submit = SubmitField('Add Comment')
+
+class RatingForm(FlaskForm):
+    rating = HiddenField('rating', validators=[InputRequired()])

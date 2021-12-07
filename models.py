@@ -9,6 +9,7 @@ class Question(db.Model):
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comments = db.relationship('Comment', backref='question', cascade='all, delete-orphan', lazy=True)
+    like = db.relationship('Liked', backref='question', cascade='all, delete-orphan', lazy=True)
 
     def __init__(self, title, text, date, img_url, user_id):
         self.title = title
@@ -28,6 +29,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     questions = db.relationship('Question', backref='user', lazy=True)
     comments = db.relationship('Comment', backref='user', lazy=True)
+    like = db.relationship('Liked', backref='user', lazy='dynamic')
 
 
     def __init__(self, first_name, last_name, email, password):
@@ -51,5 +53,14 @@ class Comment(db.Model):
         self.content = content
         self.question_id = question_id
         self.date = date
+        self.user_id = user_id
+
+class Liked(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, question_id, user_id):
+        self.question_id = question_id
         self.user_id = user_id
 
