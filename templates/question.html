@@ -37,23 +37,28 @@
 
             </tr>
 
-
-    {% for user in users %}
-                {% if user.has_liked_question(question) %}
-                <tr>
-                <td> <a href="{{url_for('like_action', question_id=question.id, action='unlike')}}"> Unlike</a> </td>
-                {% else %}
-                <td> <a href="{{url_for('like_action', question_id=question.id, action='like')}}"> Like </a> </td>
-                {% endif %}
-                    {{ user.liked.count() }} Likes
-                 {% endfor %}
             </tr>
         </table>
+        {%if hasLiked%}
+             <form action="{{ url_for('like', question_id=question.id) }}" method="post">
+             <input type="submit" value="unlike" name="unlike"/>
+        {%else%}
+             <form action="{{ url_for('like', question_id=question.id) }}" method="post">
+             <input type="submit" value="like" name="like"/>
+        {%endif%}
+        <span >{{question.like.count()}} likes</span>
+
+        </form>
+
      {% if question.comments %}
             {% if question.comments|length > 0 %}
                 <h2>Comments</h2>
                 <ul>
                 {% for comment in question.comments %}
+                    <tr>
+                        <td>{{ question.date }}</td>
+
+                    </tr>
                     <li>{{ comment.content }}</li>
                 {% endfor %}
                 </ul>

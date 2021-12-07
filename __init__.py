@@ -6,44 +6,45 @@ from flask import render_template
 from flask import request
 from flask import redirect, url_for
 from werkzeug.utils import secure_filename
-from .models import Question as Question
-from .models import User as User
-from .models import Comment as Comment
-from .models import Img as Img
-from .forms import RegisterForm, LoginForm, CommentForm
-from .database import db
+from models import Question as Question
+from models import User as User
+from models import Comment as Comment
+from models import Liked as Liked
+from models import Img as Img
+from forms import RegisterForm, LoginForm, CommentForm
+from database import db
 
-
-
-app = Flask(__name__)   # create the app
+app = Flask(__name__)  # create the app
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_class_app.db'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False   # don't need this
-app.config['SECRET_KEY'] = 'SE3155'                    # add secret key??????
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # don't need this
+app.config['SECRET_KEY'] = 'SE3155'  # add secret key??????
 
-db.init_app(app)                                        # bind the db object to this flask app
+db.init_app(app)  # bind the db object to this flask app
 
-with app.app_context():                                 # set up app and run it under app context
+with app.app_context():  # set up app and run it under app context
     db.create_all()
 
 '''
 Decorators
 '''
 
-@app.route('/')
 
+@app.route('/')
 @app.route('/landing')
 def landing():
     return render_template('landing.html')
+
 
 @app.route('/profile')
 def profile():
     if session.get('user'):
         my_questions = db.session.query(Question).all()
         form = CommentForm()
-        return render_template('profile.html', questions=my_questions, user= session['user'], form=form)
+        return render_template('profile.html', questions=my_questions, user=session['user'], form=form)
     return redirect(url_for('login'))
+
 
 @app.route('/my_questions')
 def get_questions():
@@ -53,19 +54,21 @@ def get_questions():
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/my_questions/<question_id>')
 def get_question(question_id):
     if session.get('user'):
-        my_question = db.session.query(Question).filter_by(id=question_id, user_id=session['user_id']).one()
+        my_question = db.session.query(Question).filter_by(id=question_id, user_id=session['user_id']).one_or_none()
         form = CommentForm()
     return render_template('question.html', question=my_question, user=session['user'], form=form)
+
 
 @app.route('/my_questions/new', methods=['GET', "POST"])
 def new_question():
     if session.get('user'):
         if request.method == 'POST':
-            title = request.form['title']               # get question title
-            text = request.form['questionText']         # get question text
+            title = request.form['title']  # get question title
+            text = request.form['questionText']  # get question text
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
@@ -75,20 +78,20 @@ def new_question():
 
             return redirect(url_for('get_questions'))
         else:
-            return render_template('new.html', user=session['user'])        # get request
+            return render_template('new.html', user=session['user'])  # get request
     else:
-        return redirect(url_for('login'))                                   # user is not in session
+        return redirect(url_for('login'))  # user is not in session
+
 
 @app.route('/questions/edit/<question_id>', methods=["GET", "POST"])
 def update_question(question_id):
-    if session.get('user'):                            # check if a user is saved in session
+    if session.get('user'):  # check if a user is saved in session
         if request.method == 'POST':
-            title = request.form['title']              # get title data
-            text = request.form['questionText']        # get note data
+            title = request.form['title']  # get title data
+            text = request.form['questionText']  # get note data
             question = db.session.query(Question).filter_by(id=question_id).one()
             question.title = title
             question.text = text
-
             db.session.add(question)
             db.session.commit()
 
@@ -98,6 +101,7 @@ def update_question(question_id):
             return render_template('new.html', question=my_question, user=session['user'])
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/questions/delete/<question_id>', methods=['POST'])
 def delete_question(question_id):
@@ -109,27 +113,29 @@ def delete_question(question_id):
     else:
         return redirect(url_for('get_questions'))
 
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegisterForm()
 
     if request.method == "POST" and form.validate_on_submit():
         h_password = bcrypt.hashpw(
-            request.form['password'].encode('utf-8'), bcrypt.gensalt()    # salt and hash password
+            request.form['password'].encode('utf-8'), bcrypt.gensalt()  # salt and hash password
         )
         first_name = request.form['firstname']
         last_name = request.form['lastname']
 
         new_user = User(first_name, last_name, request.form['email'], h_password)
 
-        db.session.add(new_user)     # saving new user to database
+        db.session.add(new_user)  # saving new user to database
         db.session.commit()
 
         session['user'] = first_name
-        session['user_id'] = new_user.id        # access id value from user model of this newly added user
+        session['user_id'] = new_user.id  # access id value from user model of this newly added user
 
         return redirect(url_for('get_questions'))
     return render_template('register.html', form=form)
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -146,11 +152,15 @@ def login():
     else:
         return render_template('login.html', form=login_form)
 
+
 @app.route('/logout')
 def logout():
+    # check if a user is saved in session
     if session.get('user'):
         session.clear()
-    return redirect(url_for('index'))
+
+    return render_template('landing.html')
+
 
 @app.route('/questions/<question_id>/comment', methods=['POST'])
 def new_comment(question_id):
@@ -167,6 +177,24 @@ def new_comment(question_id):
 
 
 
+@app.route('/questions/like/<question_id>',  methods=['POST'])
+def like(question_id):
+    hasLiked = False
+    like = Liked(question_id, session['user_id'])
+    question = db.session.query(Question).filter_by(id=question_id).one()
+    if session.get('user'):
+        if question.like.count() > 0:
+            Liked.query.filter_by(question_id=question_id).delete()
+            db.session.commit()
+            hasLiked = False
+        else:
+            db.session.add(like)
+            db.session.commit()
+            hasLiked = True
+        return redirect(url_for('get_question', question_id=question_id))
+    else:
+        return redirect(url_for('login'))
+
 @app.route('/questions/<question_id>/upload', methods=["GET", "POST"])
 def upload(question_id):
     pic = request.files['pic']
@@ -179,6 +207,7 @@ def upload(question_id):
     db.session.add(img)
     db.sesion.commit()
     return redirect(url_for('get_question'))
+
 
 '''@app.route('/questions/<question_id>/image')
 def get_image(question_id):

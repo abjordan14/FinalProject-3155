@@ -2,8 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectMultipleField, HiddenField
 from wtforms.validators import Length, DataRequired, EqualTo, Email, InputRequired
 from wtforms import ValidationError
-from .models import User
-from .database import db
+from models import User
+from database import db
 
 class RegisterForm(FlaskForm):
     class Meta:
