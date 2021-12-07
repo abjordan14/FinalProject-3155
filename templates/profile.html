@@ -47,18 +47,17 @@
                     <br>
                     <img src="{{question.img_url}}">
                     <br>
+                      <!-- Like -->
+                    {% if hasLiked %}
+                        <form action="{{ url_for('like', question_id=question.id) }}" method="post">
+                        <input type="submit" value="unlike" name="unlike"/>
+                    {% else %}
+                        <form action="{{ url_for('like', question_id=question.id) }}" method="post">
+                        <input type="submit" value="like" name="like"/>
+                    {% endif %}
+                    <span> {{question.like | length}} likes </span>
+                        </form>
 
-                    <!-- Rating stars -->
-                    <br>
-                        <img id="1" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                        <img id="2" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                        <img id="3" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                        <img id="4" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                        <img id="5" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                    <br>
-                    <br>
-                    <hr>
-                    <br>
 
                     <!-- Comments for our Question -->
                         {% if question.comments %}
