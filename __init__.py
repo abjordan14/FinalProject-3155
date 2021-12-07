@@ -1,5 +1,6 @@
 import bcrypt
 import os
+import pyimgur
 from flask import Flask
 from flask import session
 from flask import render_template
@@ -9,7 +10,6 @@ from werkzeug.utils import secure_filename
 from .models import Question as Question
 from .models import User as User
 from .models import Comment as Comment
-from .models import Img as Img
 from .forms import RegisterForm, LoginForm, CommentForm
 from .database import db
 
@@ -21,12 +21,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_class_app.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False   # don't need this
 app.config['SECRET_KEY'] = 'SE3155'                    # add secret key??????
-
+app.config['IMGUR_ID'] = "ae328a1f1592e82"
 db.init_app(app)                                        # bind the db object to this flask app
 
 with app.app_context():                                 # set up app and run it under app context
     db.create_all()
 
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 '''
 Decorators
 '''
@@ -65,11 +68,12 @@ def new_question():
     if session.get('user'):
         if request.method == 'POST':
             title = request.form['title']               # get question title
-            text = request.form['questionText']         # get question text
+            text = request.form['questionText']
+            img_url = request.form['img_url']
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
-            new_record = Question(title, text, today, session['user_id'])
+            new_record = Question(title, text, today, img_url, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
 
@@ -128,7 +132,7 @@ def register():
         session['user'] = first_name
         session['user_id'] = new_user.id        # access id value from user model of this newly added user
 
-        return redirect(url_for('get_questions'))
+        return redirect(url_for('profile'))
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -140,7 +144,7 @@ def login():
             session['user'] = the_user.first_name
             session['user_id'] = the_user.id
 
-            return redirect(url_for('get_questions'))
+            return redirect(url_for('profile'))
         login_form.password.errors = ['incorrect username or password']
         return render_template('login.html', form=login_form)
     else:
@@ -158,33 +162,15 @@ def new_comment(question_id):
         comment_form = CommentForm()
         if comment_form.validate_on_submit():
             comment_text = request.form['comment']
-            new_record = Comment(comment_text, int(question_id), session['user_id'])
+            from datetime import date
+            today = date.today()
+            today = today.strftime("%m-%d-%Y")
+            new_record = Comment(comment_text, int(question_id), today, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
-            return redirect(url_for('get_question', question_id=question_id))
+            return redirect(url_for('profile', question_id=question_id))
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('profile'))
 
-
-
-@app.route('/questions/<question_id>/upload', methods=["GET", "POST"])
-def upload(question_id):
-    pic = request.files['pic']
-    if not pic:
-        return "No pic uploaded", 400
-
-    filename = secure_filename(file.filename)
-    mimetype = pic.mimetype
-    img = Img(img=pic.read(), mimetype=mimetype, name=filename)
-    db.session.add(img)
-    db.sesion.commit()
-    return redirect(url_for('get_question'))
-
-'''@app.route('/questions/<question_id>/image')
-def get_image(question_id):
-    img = Img.query.filter_by(id=question_id).first()
-    if not img:
-        return redirect(url_for('get_question'))
-    return redirect(url_for() '''
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

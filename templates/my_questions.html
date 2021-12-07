@@ -6,40 +6,64 @@
         <meta name="description" content="Questions">
         <title>View your Questions</title>
         <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='profile3.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            input[type=button], input[type=submit], input[type=reset] {
+              background-color: #C2DA10;
+              border: none;
+              color: white;
+              padding: 16px 32px;
+              text-decoration: none;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+        </style>
+
     </head>
     <body>
-    	<header>
+        <!-- Navbar -->
+    	<header class="nav">
             <a href="{{url_for('landing') }}"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"></a>
     		<ul>
-                <li><a href="{{ url_for('landing')}}"> Home </a></li>
-                <li><a href="{{ url_for('new_question')}}"> Ask </a></li>
-                <li><a href="{{ url_for('logout')}}"> Logout </a></li>
+                <li><a href="{{ url_for('landing')}}" style="color: #ffffff;"> Home </a></li>
+                <li><a href="{{ url_for('profile')}}" style="color: #ffffff;"> Course Questions </a></li>
+                <li><a href="{{ url_for('new_question')}}" style="color: #ffffff;"> Ask </a></li>
+                <li><a href="{{ url_for('logout')}}" style="color: #ffffff;"> Logout </a></li>
             </ul>
     	</header>
 
-    	<h2>Welcome {{user}} to Social!</h2>
+        <div class="header">
+            <br>
+            <br>
+            <br>
+            <h3> {{user}}'s Questions </h3>
+        </div>
 
-        <h2>Questions</h2>
+        <!-- Middle Card -->
+        <div class="row">
+            <div class="center">
+                {% for question in questions %}
+                <div class="card">
+                    <h2><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a>
+                    <a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 2%"> </a></h2>
+                    <h5> {{question.date}} </h5>
+                    <br>
+                    <p style="font-size: 20px;">{{question.text}}</p>
+                    <br>
+                    {% if question.date %}
+                        <img src={{question.img_url}} >
+                        <br>
+                    {% endif %}
 
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Date</th>
-            </tr>
-            {% for question in questions %}
-            <tr>
-                <td><a href="{{url_for('get_question', question_id=question.id)}}">{{ question.title }}</a></td>
-                <td>{{ question.date }}</td>
-                <td> <a href="{{ url_for('update_question', question_id=question.id)}}"> Edit </a></td>
-                <td>
-                	<form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+                    <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
                 		<input type="submit" value="Delete">
                 	</form>
-                </td>
-
-            </tr>
+            </div>
+            </div>
+        </div>
             {% endfor %}
-        </table>
+
+
     </body>
 </html>

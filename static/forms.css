@@ -13,7 +13,7 @@ header img{
 
 body {
     height: 12vh;
-    background-size: cover;
+    /* background-size: cover; */
     font-family: sans-serif;
     margin-top: 80px;
     padding: 30px;
@@ -22,7 +22,6 @@ body {
 main {
     color:white;
 }
-
 
 
 input[type=text]{
@@ -46,7 +45,7 @@ input[type=submit]{
 }
 
 input[type=submit]:hover {
-    backgroud-color: #45a049;
+    background-color: #45a049;
 }
 
 input[type="text"]::placeholder {
@@ -68,9 +67,10 @@ textarea:focus {
   border-color: green;
   box-shadow: unset;
 }
+
 div {
     border-radius: 5px;
-    background-color: #f2f2f2;
+    background-color: #efefef;
     padding: 20px;
 }
 
@@ -89,11 +89,11 @@ div {
   right: -222px;
   top: 0;
   bottom: 0;
-  background: #fae7ea;
+  background: darkred;
   padding: 9px 15px;
   border-radius: 3px;
   border: 1px solid #e1c5c5;
-  color: #8d7575;
+  color: darkred;
   width: 182px;
   text-align: center;
   height: fit-content;

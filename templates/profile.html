@@ -8,67 +8,112 @@
         <!-- styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename='profile3.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     </head>
+
     <body>
-        <header>
+
+        <!-- This is the Navbar -->
+        <header class="nav">
                 <a href="#"> <img src="{{url_for('static', filename='logo.png')}}" class="logo"> </a>
                 <ul>
-                    <li><a href="{{ url_for('landing') }}"> Home </a></li>
-                    <li><a href="{{ url_for('new_question') }}"> Ask </a></li>
-                    <li><a href="{{ url_for('logout') }}"> Logout </a></li>
+                    <li><a href="{{ url_for('landing') }}" style="color: #ffffff;"> Home </a></li>
+                    <li><a href="{{ url_for('get_questions') }}" style="color: #ffffff;"> My Questions </a></li>
+                    <li><a href="{{ url_for('new_question') }}" style="color: #ffffff;"> Ask </a></li>
+                    <li><a href="{{ url_for('logout') }}" style="color: #ffffff;"> Logout </a></li>
                 </ul>
         </header>
+
+        <br>
+        <br>
+        <br>
+
+        <!-- Page Title -->
         <div class="header">
             <h2> Course Questions </h2>
         </div>
+
+        <!-- This is the card for our questions -->
+        <br>
         {% for question in questions %}
         <div class="row">
             <div class="leftcolumn">
                 <div class="card">
-                    <h2><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a></h2>
-                    <h5> {{question.date}}</h5>
+                    <h2 style="color: #C2DA10"><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a></h2>
+                    <h5> {{question.date}} </h5>
                     <br>
-                    <p style="font-size: 20px;">{{question.text}}</p>
+                    <p style="font-size: 20px;"> {{question.text}}</p>
                     <br>
-                    <div class="fakeimg" style="height:200px;">Image</div>
-                        <p><a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 3%"> </a>
-                        <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
-                		    <input type="submit" value="Delete">
-                        </form></p>
-                    <div class="rating-wrapper">
+                    <img src="{{question.img_url}}">
+                    <br>
+
+                    <!-- Rating stars -->
+                    <br>
                         <img id="1" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                         <img id="2" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                         <img id="3" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                         <img id="4" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
                         <img id="5" src="{{url_for('static', filename='star-solid.svg')}}" width="20">
-                    </div>
-                    {% if question.comments %}
-                    {% if question.comments|length > 0 %}
-                    <h2>Comments</h2>
-                    <ul>
-                    {% for comment in question.comments %}
-                        <li>{{ comment.content }}</li>
-                    {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% endif %}
+                    <br>
+                    <br>
+                    <hr>
+                    <br>
 
+                    <!-- Comments for our Question -->
+                        {% if question.comments %}
+                            {% if question.comments|length > 0 %}
+                        <h3>Comments</h3>
+                            <br>
+                            <br>
+                                {% for comment in question.comments %}
+                                    <p>{{comment.date}} &nbsp; &nbsp; &nbsp; <em>{{ comment.content }}</em> </p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+
+                    <br>
+                    <br>
+
+                    <!-- Question Form -->
                     <form action="{{ url_for('new_comment', question_id=question.id) }}" method="post">
-                         <div class="formwrapper">
-                            <h2 class="title">Add a comment</h2>
+
                              <div class="form-field">
                                 {{ form.comment.label }} <br/> {{ form.comment }}
                             </div>
                                 {{ form.submit }}
-                        </div>
+
                     </form>
-             </div>
-        </form>
-                 </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right Column -->
+            <div class="rightcolumn">
+
+                <!-- Instructor Messages -->
+                <div class="card">
+                    <h2 style="color: #C2DA10"> Course Introduction </h2>
+                    <br>
+                        <p> Welcome to 3155! I hope that you are enjoying yourselves. <br>
+                            Please use this site to keep in touch with each other and to help each other out <br><br>
+                            Best of luck! <br> <br>
+                            - <em> Professor Eight-Eight </em>
+                        </p>
+                </div>
+
+                 <div class="card">
+                    <h2 style="color: #C2DA10"> Next Week's Update </h2>
+                    <br>
+                        <p> Hello everyone! <br>
+                        I have moved our upcoming exam forward one week <br><br>
+                        Sorry losers :P  <br> <br>
+                        - <em> Professor Eight-Eight </em>
+                        </p>
+                </div>
+
             </div>
         </div>
-        {% endfor %}
 
     </body>
 </html>
