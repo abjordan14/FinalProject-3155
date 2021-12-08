@@ -45,3 +45,8 @@ class CommentForm(FlaskForm):
 
 class RatingForm(FlaskForm):
     rating = HiddenField('rating', validators=[InputRequired()])
+    
+ #search
+class SearchForm(Form):
+  search = StringField('search', [DataRequired()])
+  submit = SubmitField('Search', render_kw={'class': 'btn btn-success btn-block'})
