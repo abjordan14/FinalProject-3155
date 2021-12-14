@@ -1,13 +1,7 @@
 from .database import db
 import datetime
-from flask_sqlalchemy import SQLAlchemy
-from flask_whooshalchemy import whoosh_index
-from app import app
-db = SQLAlchemy()
 
 class Question(db.Model):
-    __searchable__ = ['name']
-    name = db.Column(db.String(64))
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(200))
     text = db.Column('text', db.String(100))
@@ -17,15 +11,12 @@ class Question(db.Model):
     comments = db.relationship('Comment', backref='question', cascade='all, delete-orphan', lazy=True)
     like = db.relationship('Liked', backref='question', cascade='all, delete-orphan', lazy=True)
 
-whoosh_index(app, User)
-
     def __init__(self, title, text, date, img_url, user_id):
         self.title = title
         self.text = text
         self.date = date
         self.img_url = img_url
         self.user_id = user_id
-
 
 
 class User(db.Model):
