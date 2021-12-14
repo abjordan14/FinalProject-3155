@@ -63,6 +63,16 @@ def get_question(question_id):
         form = CommentForm()
     return render_template('question.html', question=my_question, user=session['user'], form=form)
 
+# to do
+@app.route('/my_questions', methods=['GET'])
+def get_filtered_questions(searched_word):
+    word = request.query_string['searched_word']
+    if session.get('user'):
+        my_questions = db.session.query(Question).filter_by(user_id=session['user_id'], title=word).one()
+        return render_template('my_questions.html', questions=my_questions, user=session['user'])
+    else:
+        return redirect(url_for('my_questions'))
+
 @app.route('/my_questions/new', methods=['GET', "POST"])
 def new_question():
     if session.get('user'):
