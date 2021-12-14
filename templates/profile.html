@@ -38,6 +38,10 @@
         <br>
         
         <div>
+            <form class="input_primary" style="text-align: center;" method="GET" action="{{ url_for('get_filtered_questions')}}">
+                <input type="text" style="height: 40px; width: 50%; border-radius: 3px;" placeholder="Search For Your Question Here..." name="searched_word" value="{{enteredText}}" />
+                <button style="height: 40px; padding:5px 10px; background-color: #C2DA10; border-radius: 3px;" type="Submit">Search</button>
+            </form>
             <div class="leftcolumn">
                 {% for question in questions %}
                 <div class="card">
