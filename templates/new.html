@@ -12,23 +12,22 @@
     <body>
         <h1>  New Question </h1>
         {% if question %}
-        	<form action= "{{ url_for('update_question', question_id=question.id)}}" method="post">
+        	<form action= "{{ url_for('update_question', question_id=question.id)}}" method="post"></form>
         {% else %}
         	<form action="new" method="post">
         {% endif %}
            <p><label> Title </label></p>
            <p><input type="text" name="title" value="{% if question %}{{question.title}}{% endif %}"/></p>
-            <p><label> Question </label></p>
-            <p>
-            <textarea name="questionText" rows="6" cols="170" >
-            	{% if question %}
-            		{{question.text}}
-            	{% else %}
-                What would you like to know {{user}}?
-            	{% endif %}
+           <p><label> Question </label></p>
+           <p>
+           <textarea name="questionText" style="width: 100%;" rows="3" value="">
+{% if question %}
+{{question.text}}
+{% else %}What would you like to know {{user}}?
+{% endif %}
             </textarea>
-                <p style="font-size: 13px; color: green;"> Image URL </p>
-                <textarea name="img_url" rows="2" cols="50" >
+                <span style="font-size: 13px; color: green;"> Image URL </span>
+                <textarea name="img_url" style="width: 100%;" rows="2" >
                 </textarea>
 
             	{% if question %}
