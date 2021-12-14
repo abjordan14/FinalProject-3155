@@ -36,9 +36,10 @@
 
         <!-- This is the card for our questions -->
         <br>
-        {% for question in questions %}
-        <div class="row">
+        
+        <div>
             <div class="leftcolumn">
+            {% for question in questions %}
                 <div class="card">
                     <h2 style="color: #C2DA10"><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a></h2>
                     <h5> {{question.date}} </h5>
