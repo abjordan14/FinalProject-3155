@@ -42,28 +42,28 @@
 
         <!-- Middle Card -->
         <div class="row">
-            <div class="center">
-                {% for question in questions %}
-                <div class="card">
-                    <h2><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a>
-                    <a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 2%"> </a></h2>
-                    <h5> {{question.date}} </h5>
+            <form class="input_primary" style="text-align: center;" method="GET" action="{{ url_for('get_filtered_questions')}}">
+                <input type="text" style="height: 40px; width: 50%; border-radius: 3px;" placeholder="Search For Your Question Here..." name="searched_word" value="{{enteredText}}" />
+                <button style="height: 40px; padding:5px 10px; background-color: #C2DA10; border-radius: 3px;" type="Submit">Search</button>
+            </form>
+            {% for question in questions %}
+            <div class="card">
+                <h2><a href="{{ url_for('get_question', question_id=question.id) }}"> {{question.title}}</a>
+                <a href="{{ url_for('update_question', question_id=question.id)}}"> <img src="{{url_for('static', filename='pen-to-square-regular.svg')}}" style="width: 2%"> </a></h2>
+                <h5> {{question.date}} </h5>
+                <br>
+                <p style="font-size: 20px;">{{question.text}}</p>
+                <br>
+                {% if question.date %}
+                    <img src={{question.img_url}} >
                     <br>
-                    <p style="font-size: 20px;">{{question.text}}</p>
-                    <br>
-                    {% if question.date %}
-                        <img src={{question.img_url}} >
-                        <br>
-                    {% endif %}
+                {% endif %}
 
-                    <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
-                		<input type="submit" value="Delete">
-                	</form>
+                <form action="{{ url_for('delete_question', question_id=question.id)}}" method="post">
+                    <input type="submit" value="Delete">
+                </form>
             </div>
-            </div>
-        </div>
             {% endfor %}
-
-
+        </div>
     </body>
 </html>
